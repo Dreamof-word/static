@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>音乐播放器</title>
+	<script src="http://unpkg.com/axios/dist/axios.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="CSS/MusicPlayer_style.css">
+	<script type="text/javascript" src="JS/vue.js"></script>
+	<style type="text/css">
+		[v-cloak]{ /*防止在加载页面时速度过慢出现，一开始有{{msg}}闪烁的情况 */
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<div id="All">
+		<!--播放器主体区域-->
+		<div id="bj"></div>
+		<div id="content">
+			<div class="search_bar">
+				<img src="images/music_logo.png" class="logo">
+		<!--搜索歌曲-->
+		<input type="text" class="input_text" v-model="query" @keyup.enter="searchMusic" placeholder="请输入歌曲">
+		<button type="button" class="sea_logo" @click="searchMusic"></button>
+	       </div>
+		<!--搜索歌曲列表-->
+		<div class="song_wrapper" v-cloak>
+			<ul class="song_list">
+				<li v-for="i in musicList">
+					<a href="#" @click="playMusic(i.id)"></a>
+					<b>{{i.name}}</b>
+					<span v-if="i.mvid!=0" @click="playMV(i.mvid)"></span>
+				</li>
+			</ul>
+			<img src="" class="switch_btn">
+		</div>
+		<!--歌曲信息容器-->
+		<div class="player_con" :class="{playing:isPlaying}">
+		<!--黑胶碟片-->
+		<img :src="musicCover" class="autoRotate" onerror="this.src='images/mge.png'">
+		</div>
+		<!--评论区域-->
+		<div class="comment_wrapper" v-cloak>
+			<h5>热门留言</h5>
+			<div class="comment_list">
+				<dl v-for="i in hotComments">
+					<dt><img :src="i.user.avatarUrl" alt=""></dt>
+					<dd class="name"><strong>{{i.user.nickname}}</strong></dd>
+					<dd class="detail">
+						{{i.content}}
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<!--播放按钮组件-->
+		<div class="audio_con">
+			<audio ref="audio" @play="play" @pause="pause" :src="musicUrl" controls autoplay loop class="myaudio"></audio>
+		</div>
+		<div class="video_con" v-show="isShow" style="display:none;">
+		<video :src="mvUrl" controls="controls"></video>
+		<div class="mask" @click="hide"></div>
+		</div>
+</div>
+</div>
+    <script src="JS/Music_methods.js"></script>
+</body>
+</html>
